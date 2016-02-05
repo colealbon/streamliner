@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+<html>
+    <head>
+        {% block requiredeck %}
+        <script type="text/javascript" src="../../streamliner.js" charset="utf-8"></script>
+        {% endblock %}
+        {% block title %}<title>identify</title>{% endblock %}
+    </head>
+    <body
+        {% block onload %}onload="document.getElementById('servergpguserid').innerHTML = 'server: ' + gpgUserId(document.getElementById('server_public_gpg_key_armor').value);"{% endblock %}>{% block content %}{% block diagnostics %}{% endblock %}
+        <span class="server_public_gpg_key_armor">
+            <textarea
+                hidden="false"
+                id="server_public_gpg_key_armor"
+                rows=51
+                cols=62
+                >
+{{ server_public_gpg_key_armor }}
+            </textarea>
+        </span>
+        <span class="encrypted_msg_armor">
+            <textarea
+                hidden="false"
+                id="encrypted_msg_armor"
+                rows=51
+                cols=62
+                >
+{{ encrypted_msg_armor }}
+            </textarea>
+        </span>
+        <form 
+            id="client_gpg_private_key_form" 
+            >
+            <input id="decryptbutton" type="button" value="decrypt">
+        </form>
+        <client_gpg_private_key_armor><textarea id="client_gpg_private_key_armor" name="client_gpg_private_key_armor" form="client_gpg_private_key_form" rows=200 cols=62 placeholder="paste private gpg key"></textarea></client_gpg_private_key_armor><br>
+        <inbox><textarea hidden=true id="inbox" name="inbox" rows=200 cols=62 placeholder="inbox"></textarea></inbox><br>
+        <script>
+        var decryptbutton  = document.getElementById('decryptbutton');
+        decryptbutton.addEventListener("click", function (event) {
+            var encryptedmsgarmor = document.getElementById('encrypted_msg_armor').value;
+            var senderpubkeyarmor = document.getElementById('server_public_gpg_key_armor').value;
+            var receiverprivkeyarmor = document.getElementById('client_gpg_private_key_armor').value;
+            var decryptedMessage = gpgMsgDecrypt(encryptedmsgarmor, receiverprivkeyarmor, senderpubkeyarmor).then(function(pgpMessage) {
+                var clientgpguserid = gpgUserId(pgpMessage.text);
+                document.getElementById('client_gpg_user_id').innerHTML = 'client: ' + clientgpguserid;
+                document.getElementById('client_gpg_private_key_armor').hidden = true;
+                document.getElementById('decryptbutton').hidden=true;
+                document.getElementById('inbox').hidden=false;
+                document.getElementById('inbox').value=pgpMessage.text;
+            })
+        }, false);
+        </script>
+    {% endblock %}
+    </body>
+</html>

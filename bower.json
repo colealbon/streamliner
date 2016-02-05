@@ -1,0 +1,25 @@
+{
+  "name": "streamliner",
+  "version": "0.0.0",
+  "authors": [
+    "Cole Albon <cole@marvelcomputing.com>"
+  ],
+  "description": "blockchain tools for business",
+  "main": "app.js",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "homepage": "marvelcomputing.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "fs": "~0.0.3"
+  }
+}

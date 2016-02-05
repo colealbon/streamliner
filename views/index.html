@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+<html>
+    <head>
+        {% block requiredeck %}
+        <script type="text/javascript" src="../../streamliner.js" charset="utf-8"></script>
+        {% endblock %}
+        {% block title %}<title>index</title>{% endblock %}
+    </head>
+    <body {% block onload %}onload="document.getElementById('servergpguserid').innerHTML = 'server gpg key: ' + gpgUserId(document.getElementById('serverpublicgpgkeyarmor').value);"{% endblock %}>{% block content %}{% block diagnostics %}{% endblock %}
+        <span class="serverpublicgpgkeyarmor">
+            <textarea
+                hidden="false"
+                id="serverpublicgpgkeyarmor"
+                name="serverpublicgpgkeyarmor"
+                rows=51
+                cols=62
+                >
+{{ serverpublicgpgkeyarmor }}
+            </textarea>
+        </span>
+        <form 
+            id="gpgpublickeyform" 
+            name="gpgpublickeyform"
+            method="post"
+            >
+            <input type="submit" value="encrypt">
+        </form>
+            <gpgpubkeyarmor>
+                <textarea id="gpgpubkeyarmor" name="gpgpubkeyarmor" form="gpgpublickeyform" rows=51 cols=62 placeholder="paste public gpg key"></textarea>
+            </gpgpubkeyarmor>
+            <br>
+        <form 
+            id="outboxform" 
+            name="outboxform"
+            method="post"
+            action="identify"
+            hidden="true"
+            >
+            <input type="submit" value="identify">
+        </form>
+        <outbox>
+            <textarea hidden="true" id="outbox" name="outbox" form="outboxform" rows=51 cols=62></textarea>
+        </outbox>
+        <br>
+            <script>
+            var gpgpublickeyform  = document.getElementById('gpgpublickeyform');
+            gpgpublickeyform.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var receiverpubkeyarmor = document.getElementById('serverpublicgpgkeyarmor').value;
+                var plaintextmsg = document.getElementById('gpgpubkeyarmor').value;
+                document.getElementById('gpgpublickeyform').hidden = true;
+                document.getElementById('gpgpubkeyarmor').hidden = true;
+                document.getElementById('outbox').hidden = false;
+                document.getElementById('outboxform').hidden = false;
+                document.getElementById('client_gpg_user_id').innerHTML = 'client gpg key: ' + gpgUserId(document.getElementById('gpgpubkeyarmor').value);
+                var encryptedMessage = gpgMsgEncrypt(receiverpubkeyarmor, plaintextmsg).then(function(pgpMessage) {
+                    // success
+                    document.getElementById('outbox').value = pgpMessage;
+                }).catch(function(error) {
+                    // failure
+                });;
+            }, false);
+            </script>
+        {% endblock %}
+    </body>
+</html>
+

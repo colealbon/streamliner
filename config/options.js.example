@@ -1,0 +1,14 @@
+'use strict';
+module.exports = {
+    http_port: ###,
+    https_port: ###,
+    app_host:'###.###.###.###',
+    public_dir: '/path/to/public'
+    server_pub_key: '/path/to/pubkey/streamliner_server.pub',
+    server_private_key: '/path/to/privkey/streamliner_server.asc',
+    test_string: 'bubblegum - anything'
+    test_client_userid: 'test_client_0000001',
+    test_client_pub_key: '/path/to/config/test_client_0000001.pub',
+    test_client_private_key: '/path/to/config/test_client_0000001.asc',
+    test_client_private_key_password: ''
+    };
